@@ -1,121 +1,113 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 
-function VoiceAnalyzer() {
-  const [selectedAudio, setSelectedAudio] = useState(null);
-  const [audioURL, setAudioURL] = useState('');
+function VideoAnalyzer() {
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [videoURL, setVideoURL] = useState('');
   const [result, setResult] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
 
-  const handleAudioUpload = (e) => {
-    setSelectedAudio(e.target.files[0]);
-    setAudioURL('');
+  const handleVideoUpload = (e) => {
+    setSelectedVideo(e.target.files[0]);
+    setVideoURL('');
     setResult(null);
   };
 
   const handleAnalyze = () => {
-    if (!selectedAudio && !audioURL.trim()) return;
+    if (!selectedVideo && !videoURL.trim()) return;
     setIsAnalyzing(true);
 
-    // Simulated AI analysis (replace later with real backend API call)
     setTimeout(() => {
       setResult({
-        verdict: '✅ Authentic',
-        confidence: '92%',
-        notes: 'No clear indicators of AI-generated or manipulated audio detected.',
+        verdict: '⚠️ Potentially Manipulated',
+        confidence: '78%',
+        notes: 'Some AI-generated characteristics detected in audio/visual sync.',
       });
       setIsAnalyzing(false);
-    }, 2000);
+    }, 2500);
   };
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-700">
-      <Helmet>
-        <title>Voice Analyzer - AI Factify</title>
-      </Helmet>
-
       {/* ✅ Header */}
       <header className="bg-white shadow p-4 flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold">
-            <span className="text-gray-500">AI</span>
-            <span className="text-sky-400">Factify</span>
-          </h1>
-          <p className="text-xs italic text-gray-400">Where Truth is Real</p>
+        <div className="text-2xl font-bold">
+          <span className="text-gray-500">AI</span>
+          <span className="text-sky-400">Factify</span>
+          <div className="text-sm text-gray-400 italic">Where Truth is Real</div>
         </div>
-        <nav className="space-x-4 text-sm hidden sm:block">
+        <nav className="space-x-4 text-sm text-gray-600 hidden sm:block">
           <Link to="/" className="hover:underline">Home</Link>
-          <Link to="/article-analyzer" className="hover:underline">Articles</Link>
-          <Link to="/video-analyzer" className="hover:underline">Video</Link>
+          <Link to="/voice" className="hover:underline">Voice</Link>
           <Link to="/image-analyzer" className="hover:underline">Image</Link>
+          <Link to="/articles" className="hover:underline">Articles</Link>
         </nav>
       </header>
 
-      {/* ✅ Main Content */}
+      {/* ✅ Main */}
       <main className="max-w-3xl mx-auto mt-10 bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-bold text-gray-700 mb-2">🎙️ Voice Analyzer</h2>
+        <h2 className="text-xl font-bold text-gray-700 mb-2">🎬 Video Analyzer</h2>
         <p className="text-sm text-gray-600 mb-4">
-          Upload an audio file or paste a link to analyze its authenticity using AI.
+          Upload a video or paste a link to analyze authenticity using AI tools.
         </p>
 
         {/* 📘 Instructions */}
         <ul className="text-xs text-gray-500 mb-4 bg-gray-50 p-3 rounded border border-gray-200 space-y-1">
-          <li>• Supported formats: MP3, WAV, OGG</li>
-          <li>• Max file size: 25MB</li>
-          <li>• AI scans for deepfake audio indicators and digital manipulation.</li>
-          <li>• Your audio files remain private and secure.</li>
+          <li>• Supported formats: MP4, MOV, WEBM</li>
+          <li>• Max file size: 50MB</li>
+          <li>• We do not store your videos. Privacy is respected.</li>
+          <li>• AI scans for deepfake indicators and editing inconsistencies.</li>
         </ul>
 
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Upload Audio File:
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Upload a Video File:
             </label>
             <input
               type="file"
-              accept="audio/mp3,audio/wav,audio/ogg"
-              onChange={handleAudioUpload}
+              accept="video/mp4,video/webm,video/quicktime"
+              onChange={handleVideoUpload}
               className="mb-2"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Or Paste Audio URL:
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Or Paste a Video Link:
             </label>
             <input
               type="url"
-              value={audioURL}
+              value={videoURL}
               onChange={(e) => {
-                setAudioURL(e.target.value);
-                setSelectedAudio(null);
+                setVideoURL(e.target.value);
+                setSelectedVideo(null);
                 setResult(null);
               }}
-              placeholder="https://example.com/audio.mp3"
+              placeholder="https://example.com/video.mp4"
               className="w-full p-2 border rounded text-sm"
             />
           </div>
 
           <button
             onClick={handleAnalyze}
-            disabled={isAnalyzing || (!selectedAudio && !audioURL.trim())}
+            disabled={isAnalyzing || (!selectedVideo && !videoURL.trim())}
             className={`bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-sm ${
               isAnalyzing ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
-            {isAnalyzing ? 'Analyzing...' : 'Analyze Voice'}
+            {isAnalyzing ? 'Analyzing...' : 'Analyze Video'}
           </button>
         </div>
 
-        {/* 🎧 Audio Preview */}
-        {selectedAudio && (
+        {/* 📽 Preview */}
+        {selectedVideo && (
           <div className="mt-4">
-            <p className="text-sm mb-1">Preview:</p>
-            <audio
-              src={URL.createObjectURL(selectedAudio)}
+            <p className="text-sm text-gray-600 mb-1">Preview:</p>
+            <video
+              src={URL.createObjectURL(selectedVideo)}
               controls
-              className="w-full max-w-sm"
+              className="w-full max-w-sm rounded shadow-md"
             />
           </div>
         )}
@@ -139,4 +131,4 @@ function VoiceAnalyzer() {
   );
 }
 
-export default VoiceAnalyzer;
+export default VideoAnalyzer;

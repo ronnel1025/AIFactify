@@ -1,5 +1,5 @@
 // src/FactVibes.js
-
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const mockVibes = [
@@ -7,20 +7,37 @@ const mockVibes = [
     claim: 'Earth is flat',
     verdict: 'FALSE',
     timestamp: 'Just now',
+    likes: 12,
+    comments: 3,
+    shares: 5,
   },
   {
     claim: 'COVID-19 vaccine causes infertility',
     verdict: 'MISLEADING',
     timestamp: '5 minutes ago',
+    likes: 20,
+    comments: 2,
+    shares: 8,
   },
   {
     claim: '5G spreads viruses',
     verdict: 'FALSE',
     timestamp: '10 minutes ago',
+    likes: 8,
+    comments: 1,
+    shares: 2,
   },
 ];
 
 export default function FactVibes() {
+  const [vibes, setVibes] = useState(mockVibes);
+
+  const handleReaction = (index, reactionType) => {
+    const updatedVibes = [...vibes];
+    updatedVibes[index][reactionType] += 1;
+    setVibes(updatedVibes);
+  };
+
   return (
     <div className="min-h-screen bg-white text-gray-800 p-8">
       <h1 className="text-3xl font-bold text-center mb-4">
@@ -33,7 +50,7 @@ export default function FactVibes() {
       </p>
 
       <div className="space-y-4 max-w-xl mx-auto">
-        {mockVibes.map((vibe, index) => (
+        {vibes.map((vibe, index) => (
           <div key={index} className="bg-gray-50 p-4 rounded-lg shadow border-l-4 border-blue-400 hover:border-blue-600 transition">
             <p className="text-sm text-gray-500">{vibe.timestamp}</p>
             <p className="font-medium mt-1">
@@ -43,9 +60,9 @@ export default function FactVibes() {
             <p className="mt-1 font-semibold text-red-600">Verdict: {vibe.verdict}</p>
 
             <div className="flex space-x-4 mt-2 text-sm text-gray-500">
-              <span>❤️ 12</span>
-              <span>💬 3</span>
-              <span>🔁 5</span>
+              <span onClick={() => handleReaction(index, 'likes')} className="cursor-pointer">❤️ {vibe.likes}</span>
+              <span onClick={() => handleReaction(index, 'comments')} className="cursor-pointer">💬 {vibe.comments}</span>
+              <span onClick={() => handleReaction(index, 'shares')} className="cursor-pointer">🔁 {vibe.shares}</span>
             </div>
           </div>
         ))}

@@ -1,133 +1,140 @@
-// ✅ Cleaned App.js with menu, additional pages, and consistent layout
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
-import VoiceAnalyzer from './VoiceAnalyzer';
-import MediaAnalyzer from './MediaAnalyzer';
-import LinkAnalyzer from './LinkAnalyzer';
-import ArticleAnalyzer from './ArticleAnalyzer';
-import FactVibes from './FactVibes';
-import Features from './Features';
-import NextFeatureStep from './NextFeatureStep';
-import Rebuttal from './Rebuttal';
-import SocialHub from './SocialHub';
-import SocialFeatures from './SocialFeatures';
-import TruthThreads from './TruthThreads';
-import { ResponsiveRadialBar } from '@nivo/radial-bar';
+import { useNavigate, Link } from 'react-router-dom';
 
-const radialData = [
-  {
-    id: 'Bias Score',
-    data: [
-      { x: 'News A', y: 70 },
-      { x: 'News B', y: 85 },
-      { x: 'News C', y: 60 },
-      { x: 'Social X', y: 40 },
-    ],
-  },
-];
+function ArticleAnalyzer() {
+  const [articleText, setArticleText] = useState('');
+  const [result, setResult] = useState(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
-function Home() {
+  const navigate = useNavigate();
+
+  const handleAnalyze = async () => {
+    if (!articleText.trim()) return;
+    setIsAnalyzing(true);
+
+    // Simulated AI analysis (replace this later with real AI backend)
+    setTimeout(() => {
+      setResult({
+        verdict: '✅ Mostly True',
+        confidence: '88%',
+        notes: 'Minor bias detected, but overall aligns with verified sources.',
+        keywords: ['Climate Change', 'Renewable Energy', 'Global Warming'],
+        relatedResults: [
+          { id: 1, title: 'Climate Change Facts', summary: 'Verified insights on climate data and accuracy.' },
+          { id: 2, title: 'Renewable Energy Analysis', summary: 'AI-driven exploration of renewable energy claims.' },
+          { id: 3, title: 'Global Warming Trends', summary: 'Fact-checking global warming narratives.' },
+        ],
+      });
+      setIsAnalyzing(false);
+    }, 2000);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-700">
       <Helmet>
-        <title>AI Factify - Where Truth is Real</title>
-        <meta name="description" content="Analyze media, voice, articles and links for truth." />
+        <title>Article Analyzer - AI Factify</title>
       </Helmet>
 
       {/* Header */}
       <header className="bg-white shadow p-4 flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-blue-600">AI Factify</h1>
-        <nav className="space-x-4 text-sm text-gray-600">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-700">
+            <span className="text-gray-500">AI</span>
+            <span className="text-sky-400">Factify</span>
+          </h1>
+          <p className="text-xs italic text-gray-400">Where Truth is Real</p>
+        </div>
+        <nav className="space-x-4 text-sm text-gray-600 hidden sm:block">
           <Link to="/" className="hover:underline">Home</Link>
-          <Link to="/articles" className="hover:underline">Articles</Link>
           <Link to="/voice" className="hover:underline">Voice</Link>
-          <Link to="/media" className="hover:underline">Media</Link>
-          <Link to="/link" className="hover:underline">Link</Link>
-          <Link to="/factvibes" className="hover:underline">FactVibes</Link>
-          <Link to="/features" className="hover:underline">Features</Link>
-          <Link to="/next" className="hover:underline">Next Step</Link>
-          <Link to="/rebuttal" className="hover:underline">Rebuttal</Link>
-          <Link to="/socialhub" className="hover:underline">Social Hub</Link>
-          <Link to="/socialfeatures" className="hover:underline">Social Features</Link>
-          <Link to="/truththreads" className="hover:underline">TruthThreads</Link>
+          <Link to="/video" className="hover:underline">Video</Link>
+          <Link to="/image-analyzer" className="hover:underline">Image</Link>
         </nav>
       </header>
 
-      {/* Main */}
-      <main className="p-6">
-        <section className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-2">Explore the Truth with AI</h2>
-          <p className="text-gray-600">Start analyzing different types of content below.</p>
-        </section>
+      {/* Main Content */}
+      <main className="p-6 max-w-3xl mx-auto">
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-xl font-bold text-gray-700 mb-2">📰 Article Analyzer</h2>
+          <p className="text-sm text-gray-600 mb-4">
+            Paste a full article or excerpt to check for factual accuracy and bias.
+          </p>
 
-        <section className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          <Link to="/articles" className="bg-white rounded-lg p-6 shadow hover:shadow-md transition">
-            <p className="font-semibold">📰 Article Analyzer</p>
-            <p className="text-sm text-gray-500 mt-1">Check for accuracy and bias in written claims.</p>
-          </Link>
-          <Link to="/voice" className="bg-white rounded-lg p-6 shadow hover:shadow-md transition">
-            <p className="font-semibold">🎙 Voice Analyzer</p>
-            <p className="text-sm text-gray-500 mt-1">Upload and analyze speech content.</p>
-          </Link>
-          <Link to="/media" className="bg-white rounded-lg p-6 shadow hover:shadow-md transition">
-            <p className="font-semibold">🖼 Media Analyzer</p>
-            <p className="text-sm text-gray-500 mt-1">Analyze images or videos for authenticity.</p>
-          </Link>
-          <Link to="/link" className="bg-white rounded-lg p-6 shadow hover:shadow-md transition">
-            <p className="font-semibold">🔗 Link Analyzer</p>
-            <p className="text-sm text-gray-500 mt-1">Paste a link to check its credibility.</p>
-          </Link>
-        </section>
+          <ul className="text-xs text-gray-500 mb-4 bg-gray-50 p-3 rounded border border-gray-200 space-y-1">
+            <li>• Supported input: Text-based articles or statements</li>
+            <li>• Limit: Max 3000 characters</li>
+            <li>• AI scans for factual consistency, exaggeration, and tone</li>
+            <li>• We don’t store your article. Private and secure.</li>
+          </ul>
 
-        {/* Sample Graph */}
-        <section className="mt-16 bg-white p-6 rounded-lg shadow max-w-4xl mx-auto">
-          <h3 className="text-lg font-semibold mb-4 text-center">📊 Bias Score Comparison</h3>
-          <div style={{ height: '300px' }}>
-            <ResponsiveRadialBar
-              data={radialData}
-              keys={['y']}
-              indexBy="x"
-              maxValue={100}
-              margin={{ top: 20, right: 40, bottom: 40, left: 40 }}
-              padding={0.3}
-              radialAxisStart={{ tickSize: 5, tickPadding: 5, tickRotation: 0 }}
-              circularAxisOuter={{ tickSize: 5, tickPadding: 12, tickRotation: 0 }}
-              enableLabels={true}
-              colors={{ scheme: 'category10' }}
-              animate={true}
-            />
-          </div>
-        </section>
+          <textarea
+            rows={6}
+            value={articleText}
+            onChange={(e) => setArticleText(e.target.value)}
+            placeholder="Paste article text here..."
+            maxLength={3000}
+            className="w-full border border-gray-300 p-3 rounded text-sm resize-none mb-4"
+          />
+
+          <button
+            onClick={handleAnalyze}
+            disabled={isAnalyzing || !articleText.trim()}
+            className={`bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-sm ${
+              isAnalyzing ? 'opacity-50 cursor-not-allowed' : ''
+            }`}
+          >
+            {isAnalyzing ? 'Analyzing...' : 'Analyze Article'}
+          </button>
+
+          {result && (
+            <div className="mt-6 bg-gray-100 p-4 rounded shadow">
+              <h4 className="text-md font-semibold mb-2">🔍 Result</h4>
+              <p><strong>Verdict:</strong> {result.verdict}</p>
+              <p><strong>Confidence:</strong> {result.confidence}</p>
+              <p><strong>Notes:</strong> {result.notes}</p>
+
+              {/* Keywords */}
+              <div className="mt-3">
+                <strong>🔑 Keywords:</strong>
+                <ul className="list-disc ml-5">
+                  {result.keywords.map((kw, i) => <li key={i}>{kw}</li>)}
+                </ul>
+              </div>
+
+              {/* Related Results */}
+              <div className="mt-4">
+                <h5 className="text-md font-semibold">📚 Similar Analyses:</h5>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-2">
+                  {result.relatedResults.slice(0,3).map((rel) => (
+                    <div key={rel.id} className="bg-white p-3 border rounded shadow-sm">
+                      <h6 className="font-semibold text-sm">{rel.title}</h6>
+                      <p className="text-xs mt-1">{rel.summary}</p>
+                      <button
+                        className="mt-2 text-xs text-blue-500 underline"
+                        onClick={() => navigate(`/discussion/${rel.id}`)}
+                      >
+                        🎤 Discuss
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-100 mt-10 py-4 text-center text-sm text-gray-400">
-        &copy; {new Date().getFullYear()} AI Factify by Ron Echual — All Rights Reserved.
+      <footer className="bg-gray-100 mt-10 py-4 text-center text-xs text-gray-400">
+        <p>&copy; {new Date().getFullYear()} AI Factify™ by Ron Echual — All Rights Reserved.</p>
+        <div className="mt-2 space-x-4">
+          <Link to="/about" className="hover:underline">About</Link>
+          <Link to="/contact" className="hover:underline">Contact</Link>
+        </div>
       </footer>
     </div>
   );
 }
 
-function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/articles" element={<ArticleAnalyzer />} />
-        <Route path="/voice" element={<VoiceAnalyzer />} />
-        <Route path="/media" element={<MediaAnalyzer />} />
-        <Route path="/link" element={<LinkAnalyzer />} />
-        <Route path="/factvibes" element={<FactVibes />} />
-        <Route path="/features" element={<Features />} />
-        <Route path="/next" element={<NextFeatureStep />} />
-        <Route path="/rebuttal" element={<Rebuttal />} />
-        <Route path="/socialhub" element={<SocialHub />} />
-        <Route path="/socialfeatures" element={<SocialFeatures />} />
-        <Route path="/truththreads" element={<TruthThreads />} />
-      </Routes>
-    </Router>
-  );
-}
-
-export default App;
+export default ArticleAnalyzer;
